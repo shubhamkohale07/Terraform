@@ -1,0 +1,68 @@
+In Terraform, there are various functions available to manipulate data, perform calculations, and manage resources. Here are some commonly used functions:
+1. `abs()`: Returns the absolute value of a number.
+2. `ceil()`: Returns the smallest integer value greater than or equal to a given number.
+3. `concat()`: Concatenates one or more lists or strings.
+4. `element()`: Retrieves a single element from a list at the specified index.
+5. `file()`: Reads the contents of a file and returns it as a string.
+6. `join()`: Joins elements of a list into a single string using a separator.
+7. `list()`: Constructs a list from its arguments.
+8. `map()`: Constructs a map from a list of key-value pairs.
+9. `max()`: Returns the maximum value from a list of numbers.
+10. `min()`: Returns the minimum value from a list of numbers.
+11. `regex()` and `replace()`: Perform regular expression matching and replacement on strings.
+12. `slice()`: Extracts a subset of elements from a list.
+13. `split()`: Splits a string into a list of substrings based on a delimiter.
+14. `timestamp()`: Converts a string into a timestamp value.
+15. `tolower()`, `toupper()`, `title()`: Convert strings to lowercase, uppercase, or title case respectively.
+16. `try()`: Attempts to evaluate an expression and returns a default value if an error occurs.
+17. `uuid()`: Generates a Universally Unique Identifier (UUID).
+18. `values()`: Extracts the values from a map and returns them as a list.
+19. `zipmap()`: Combines two lists into a map where elements from one list are used as keys and elements from another list are used as values.
+These are just a few examples, and Terraform provides many more functions to handle different use cases. You can find a comprehensive list of functions and their usage in the Terraform documentation.
+
+=====
+element:
+
+locals {
+  fruits = ["apple", "banana", "orange", "grape", "kiwi"]
+}
+output "selected_fruit" {
+  value = element(local.fruits, 2) # Retrieve the fruit at index 2 (which is "orange")
+}
+
+In this example:
+- `locals.fruits` is a list containing different types of fruits.
+- We use the `element()` function to retrieve the fruit at index 2 from the `fruits` list.
+- The output will display the selected fruit, which in this case will be "orange".
+You can replace `2` with any other index to retrieve a different fruit from the list. Just remember that indices in Terraform are zero-based, so the first element has index 0, the second has index 1, and so on.
+
+variable "instance_types" {
+  type    = list(string)
+  default = ["t2.micro", "t2.small", "t2.medium", "m5.large", "m5.xlarge"]
+}
+variable "environment" {
+  type    = string
+  default = "development"
+}
+locals {
+  preferred_instance_type = {
+    "development" = "t2.micro"
+    "production"  = "m5.large"
+  }
+}
+resource "aws_instance" "example" {
+  instance_type = element(
+    var.instance_types,
+    index(local.preferred_instance_type[var.environment], var.instance_types)
+  )
+  // Other resource configurations...
+}
+=========
+lookup 
+
+: used to retrive the valuses from map 
+  route53_aws_profile_map = {
+    "aerospike.cloud" = "core_prod_dns"
+    "amstest.cloud"   = "data_ams_test_dns"
+  }
+  route53_aws_profile = lookup(local.route53_aws_profile_map, var.tld, "default")
