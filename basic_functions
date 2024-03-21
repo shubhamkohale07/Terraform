@@ -22,7 +22,6 @@ These are just a few examples, and Terraform provides many more functions to han
 
 =====
 element:
-Retrieves a single element from a list at the specified index.
 
 locals {
   fruits = ["apple", "banana", "orange", "grape", "kiwi"]
@@ -60,10 +59,30 @@ resource "aws_instance" "example" {
 }
 =========
 lookup 
+The `lookup()` function in Terraform is used to retrieve the value of a specified key from a map or object. Here's a simple example to illustrate its usage:
+----
+variable "my_map" {
+  type = map(string)
+  default = {
+    "key1" = "value1"
+    "key2" = "value2"
+    "key3" = "value3"
+  }
+}
+output "lookup_example" {
+  value = lookup(var.my_map, "key2", "default_value")
+}
+----
+In this example:
+- We have a variable `my_map` which is a map containing key-value pairs.
+- We use the `lookup()` function to retrieve the value associated with the key "key2" from the `my_map` variable.
+- If the key "key2" is found in the map, the corresponding value ("value2") is returned.
+- If the key "key2" is not found in the map, the default value "default_value" is returned instead.
 
-: used to retrive the valuses from map 
   route53_aws_profile_map = {
     "aerospike.cloud" = "core_prod_dns"
     "amstest.cloud"   = "data_ams_test_dns"
   }
   route53_aws_profile = lookup(local.route53_aws_profile_map, var.tld, "default")
+
+  
