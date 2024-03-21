@@ -22,6 +22,7 @@ These are just a few examples, and Terraform provides many more functions to han
 
 =====
 element:
+Retrieves a single element from a list at the specified index.
 
 locals {
   fruits = ["apple", "banana", "orange", "grape", "kiwi"]
